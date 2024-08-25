@@ -36,10 +36,10 @@ function App() {
     }
   };
 
-  const handleFilter = (res) => {
-    console.log(res.data);
+  const handleFilter = (selectedOptions) => {
+    console.log(selectedOptions);
     // console.log(res.filter(item => isNaN(item)));
-    if (!res) return;
+    // if (!res) return;
 
     const filtered = [];
     if (selectedOptions.includes('Alphabets')) {
@@ -59,9 +59,24 @@ function App() {
 
     setFilteredResponse(filtered.join(', '));
   };
+  
   const handleSelectChange = (e) => {
-    const options = Array.from(e.target.selectedOptions, option => option.value);
-    setSelectedOptions(options);
+    if (selectedOptions.includes(e.target.value)){
+      selectedOptions.splice(selectedOptions.indexOf(e.target.value),1);
+      handleFilter(selectedOptions);
+    }
+    else{
+      console.log("Added something");
+      console.log(e.target.value);
+      // const newse = 
+      setSelectedOptions(selectedOptions => {
+        const  newse = [...selectedOptions,e.target.value];
+        return newse;
+      });
+      console.log("in functions");
+      console.log(selectedOptions);
+      handleFilter([...selectedOptions,e.target.value]);
+    }
   };
 
   return (
@@ -85,13 +100,13 @@ function App() {
             className="multi-select"
             multiple
             value={selectedOptions}
-            onChange={handleSelectChange}
+            onClick={handleSelectChange}
           >
             <option value="Alphabets">Alphabets</option>
             <option value="Numbers">Numbers</option>
             <option value="Highest lowercase alphabet">Highest lowercase alphabet</option>
           </select>
-          <button className="filter-btn" onClick={()=>{handleFilter(res)}}>Filter</button>
+          {/* <button className="filter-btn" onClick={()=>{handleFilter(res)}}>Filter</button> */}
         </div>
       )}
       {filteredResponse && (
